@@ -1,0 +1,40 @@
+name: Orquestador de integración
+
+on:
+  repository_dispatch:
+    types: [update-remote-feature]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: read
+
+jobs:
+  integrate-feature:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.SHELL_DISPATCH_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+          scope: '@mercadofabio'
+
+      - name: Actualizar el paquete recibido
+        if: github.event_name == 'repository_dispatch'
+        run: npm install ${{ github.event.client_payload.package_name }}@latest
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Validar la integración
+        run: npm run build
+
+      - name: Guardar dependencias actualizadas
+        if: github.event_name == 'repository_dispatch'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: chore(deps): integra ${{ github.event.client_payload.grupo }}
+          file_pattern: package.json package-lock.json

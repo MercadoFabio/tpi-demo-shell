@@ -1,0 +1,16 @@
+<header class="topbar">
+  <a class="brand" routerLink="/dashboard">TPI · Shell App</a>
+  <span class="badge">Angular 22</span>
+</header>
+
+<div class="layout">
+  <nav aria-label="Navegación principal" class="sidebar">
+    <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+    <a routerLink="/usuarios" routerLinkActive="active">Usuarios</a>
+    <a routerLink="/productos" routerLinkActive="active">Productos</a>
+  </nav>
+
+  <main>
+    <router-outlet />
+  </main>
+</div>
