@@ -1,42 +1,28 @@
-name: Orquestador de integración
+name: Integrar librerias en Shell
 
-'on':
+on:
   push:
-    branches: [main]
-  repository_dispatch:
-    types:
-      - update-remote-feature
-  workflow_dispatch: {}
+    branches:
+      - main
+  workflow_dispatch:
 
 permissions:
   contents: write
   packages: read
 
 jobs:
-  integrate-feature:
+  integrate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.SHELL_DISPATCH_TOKEN }}
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           registry-url: https://npm.pkg.github.com
           scope: '@mercadofabio'
-
-      - name: Instalar las librerías publicadas
-        run: npm install
+      - run: npm install
         env:
           NODE_AUTH_TOKEN: ${{ secrets.SHELL_DISPATCH_TOKEN }}
-
-      - name: Validar la integración
-        run: npm run build
-
-      - name: Guardar dependencias actualizadas
-        if: github.event_name == 'repository_dispatch'
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: chore(deps): integra ${{ github.event.client_payload.grupo }}
-          file_pattern: package.json package-lock.json
+      - run: npm run build
