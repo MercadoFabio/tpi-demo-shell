@@ -24,6 +24,14 @@ npm install
 npm start
 ```
 
+El Shell y las librerías de dominio consultan el BFF Java compartido en
+`http://localhost:8081/api`. Para levantarlo:
+
+```bash
+cd ..\..\ejemplo-tpi-backend\tpi-backend-gateway
+docker compose up --build
+```
+
 El workflow `actualizar-shell.yml` recibe `repository_dispatch`, instala la última versión del paquete y conserva `package.json` y `package-lock.json`.
 
 > Para que el evento entre repositorios funcione, configurar en este repositorio y en ambos repositorios de features un secret `SHELL_DISPATCH_TOKEN`: un PAT clásico con alcance `repo`. La demo conserva el nombre del secret explícito para que se pueda explicar el límite de permisos de `GITHUB_TOKEN`.
