@@ -1,6 +1,6 @@
 name: Orquestador de integración
 
-on:
+'on':
   repository_dispatch:
     types: [update-remote-feature]
   workflow_dispatch:
@@ -23,11 +23,10 @@ jobs:
           registry-url: https://npm.pkg.github.com
           scope: '@mercadofabio'
 
-      - name: Actualizar el paquete recibido
-        if: github.event_name == 'repository_dispatch'
-        run: npm install ${{ github.event.client_payload.package_name }}@latest
+      - name: Instalar las librerías publicadas
+        run: npm install
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.SHELL_DISPATCH_TOKEN }}
 
       - name: Validar la integración
         run: npm run build
