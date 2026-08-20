@@ -1,9 +1,12 @@
 name: Orquestador de integración
 
 'on':
+  push:
+    branches: [main]
   repository_dispatch:
-    types: [update-remote-feature]
-  workflow_dispatch:
+    types:
+      - update-remote-feature
+  workflow_dispatch: {}
 
 permissions:
   contents: write
