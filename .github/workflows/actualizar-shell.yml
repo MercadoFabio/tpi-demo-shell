@@ -1,9 +1,7 @@
 name: Integrar librerias en Shell
 
 on:
-  repository_dispatch:
-    types:
-      - update-remote-feature
+  repository_dispatch: { types: [update-remote-feature] }
   workflow_dispatch:
 
 permissions:
