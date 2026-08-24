@@ -24,8 +24,8 @@ npm install
 npm start
 ```
 
-El Shell y las librerías de dominio consultan el BFF Java compartido en
-`http://localhost:8081/api`. Para levantarlo:
+El Shell se renderiza en el servidor Node y las librerías consultan el BFF Java mediante rutas relativas
+`/api/v1/*`; Nginx conserva el mismo origen y reenvía esas solicitudes al BFF. Para levantarlo:
 
 ```bash
 cd ..\..\ejemplo-tpi-backend\tpi-backend-gateway
