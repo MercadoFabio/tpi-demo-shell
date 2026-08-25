@@ -12,7 +12,7 @@ app.use((request, response, next) => {
     .then((ssrResponse) => ssrResponse ? writeResponseToNodeResponse(ssrResponse, response) : next())
     .catch(next);
 });
-app.use((_error, _request, response, _next) => {
+app.use((_error: unknown, _request: express.Request, response: express.Response, _next: express.NextFunction) => {
   if (!response.headersSent) {
     response.status(500).send('Unexpected server error');
   }

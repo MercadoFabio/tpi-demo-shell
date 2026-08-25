@@ -1,7 +1,6 @@
 import { isPlatformServer } from '@angular/common';
 import { HttpInterceptorFn } from '@angular/common/http';
-import { inject, PLATFORM_ID } from '@angular/core';
-import { REQUEST } from '@angular/ssr';
+import { REQUEST, inject, PLATFORM_ID } from '@angular/core';
 
 const INTERNAL_BFF_ORIGIN = 'http://bff:8080';
 const SESSION_COOKIE = '__Host-tpi-session';
@@ -12,7 +11,7 @@ export const ssrApiInterceptor: HttpInterceptorFn = (request, next) => {
   }
 
   const sessionCookie = readSessionCookie(inject(REQUEST, { optional: true }));
-  const headers = sessionCookie ? { Cookie: sessionCookie } : {};
+  const headers: Record<string, string> = sessionCookie ? { Cookie: sessionCookie } : {};
 
   return next(request.clone({ url: `${INTERNAL_BFF_ORIGIN}${request.url}`, setHeaders: headers }));
 };

@@ -14,8 +14,8 @@
     "target": "ES2022",
     "module": "preserve",
     "paths": {
-      "@mercadofabio/usuarios-lib": ["../tpi-demo-usuarios-main/projects/usuarios-lib/src/public-api.ts"],
-      "@mercadofabio/productos-lib": ["../tpi-demo-productos-main/projects/productos-lib/src/public-api.ts"]
+      "@mercadofabio/usuarios-lib": ["../tpi-demo-usuarios/projects/usuarios-lib/src/public-api.ts"],
+      "@mercadofabio/productos-lib": ["../tpi-demo-productos/projects/productos-lib/src/public-api.ts"]
     }
   },
   "angularCompilerOptions": {
