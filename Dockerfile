@@ -7,6 +7,7 @@ COPY tpi-demo-productos/projects/productos-lib ./tpi-demo-productos/projects/pro
 COPY tpi-demo-shell ./tpi-demo-shell
 WORKDIR /workspace/tpi-demo-shell
 RUN npm ci
+RUN ln -s /workspace/tpi-demo-shell/node_modules /workspace/node_modules
 RUN npm run build -- --configuration production
 
 FROM node:22-alpine AS runtime
