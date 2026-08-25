@@ -17,13 +17,5 @@ export const ssrApiInterceptor: HttpInterceptorFn = (request, next) => {
 };
 
 function readSessionCookie(request: Request | null): string | null {
-  const cookieHeader = request?.headers.get('cookie');
-  if (!cookieHeader) {
-    return null;
-  }
-
-  return cookieHeader
-    .split(';')
-    .map((cookie) => cookie.trim())
-    .find((cookie) => cookie.startsWith(`${SESSION_COOKIE}=`)) ?? null;
+  return request?.headers.get('cookie') ?? null;
 }

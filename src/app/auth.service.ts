@@ -19,24 +19,46 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
+    console.log('🔵 [FRONTEND-AUTH] Invocando POST /api/v1/auth/login para usuario:', email);
     return this.http.post<SessionResponse>('/api/v1/auth/login', { email, password }).pipe(
-      tap((session) => this.session.set(session)),
-      catchError(() => throwError(() => new Error('No fue posible iniciar sesión. Verificá tus credenciales.'))),
+      tap((session) => {
+        console.log('🟢 [FRONTEND-AUTH] Sesión iniciada con éxito. Cookie HttpOnly establecida por el BFF:', session);
+        this.session.set(session);
+      }),
+      catchError((err) => {
+        console.error('🔴 [FRONTEND-AUTH] Error en inicio de sesión:', err);
+        return throwError(() => new Error('No fue posible iniciar sesión. Verificá tus credenciales.'));
+      }),
     );
   }
 
   logout() {
+    console.log('🔵 [FRONTEND-AUTH] Invocando POST /api/v1/auth/logout...');
     const csrfToken = this.readCsrfToken();
     return this.http.post<void>('/api/v1/auth/logout', undefined, {
       headers: csrfToken ? new HttpHeaders({ 'X-CSRF-Token': csrfToken }) : undefined,
-    }).pipe(tap(() => this.session.set(null)));
+    }).pipe(
+      tap(() => {
+        console.log('🟢 [FRONTEND-AUTH] Sesión finalizada.');
+        this.session.set(null);
+      }),
+      catchError((err) => {
+        console.error('🔴 [FRONTEND-AUTH] Error al cerrar sesión:', err);
+        return throwError(() => err);
+      })
+    );
   }
 
   refreshSession() {
+    console.log('🔵 [FRONTEND-AUTH] Verificando sesión actual en GET /api/v1/auth/session...');
     return this.http.get<SessionResponse>('/api/v1/auth/session').pipe(
       map((session) => session.authenticated ? session : null),
-      tap((session) => this.session.set(session)),
-      catchError(() => {
+      tap((session) => {
+        console.log('🟢 [FRONTEND-AUTH] Estado de sesión actual:', session ? `Autenticado como ${session.email}` : 'No autenticado');
+        this.session.set(session);
+      }),
+      catchError((err) => {
+        console.warn('🟡 [FRONTEND-AUTH] Sin sesión activa o error de conexión:', err);
         this.session.set(null);
         return of(null);
       }),
